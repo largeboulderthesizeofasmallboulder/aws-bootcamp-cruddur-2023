@@ -17,6 +17,9 @@ RUN pip3 install -r requirements.txt
 # first period .  /backend-flask outside 
 # second perod  . /backend-flask inside
 COPY . .
+COPY scriptToStart.sh /scriptToStart.sh
+RUN chmod +x /scriptToStart.sh
+
 
 #Set env vars
 #Inside the container and will remain set when the container is running
@@ -26,4 +29,4 @@ EXPOSE ${PORT}
 
 # CMD (command)
 # python3 -m flask run --host=0.0.0.0 --port=4567
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
+CMD /scriptToStart.sh
