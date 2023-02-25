@@ -1,4 +1,8 @@
 from datetime import datetime, timedelta, timezone
+from opentelemetry import trace
+
+
+
 class HomeActivities:
   def run():
     now = datetime.now(timezone.utc).astimezone()
