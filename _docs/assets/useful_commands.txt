@@ -1,2 +1,14 @@
 docker run --rm -p 4567:4567 -it  -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 docker ps
+
+
+export HONEYCOMB_API_KEY="wCBuBsDel2lEBiGYLX5tcH"  or
+gp env HONEYCOMB_API_KEY="wCBuBsDel2lEBiGYLX5tcH"
+
+export HONEYCOMB_SERVICE_NAME="Cruddur"  or
+gp env HONEYCOMB_API_KEY="Cruddur"
+
+
+
+export ROLLBAR_ACCESS_TOKEN="7079b81140634079af13ef3395c86855"
+gp env ROLLBAR_ACCESS_TOKEN="7079b81140634079af13ef3395c86855"
