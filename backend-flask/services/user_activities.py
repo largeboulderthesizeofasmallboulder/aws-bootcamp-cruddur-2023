@@ -34,7 +34,7 @@ class UserActivities:
                           'created_at': (now - timedelta(days=1)).isoformat(),
                           'expires_at': (now + timedelta(days=31)).isoformat()
                       }]
-                    else:
+                    elif user_handle == 'Worf':
                       results = [{
                             'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
                             'handle':  'Worf',
@@ -49,6 +49,28 @@ class UserActivities:
                             'created_at': (now - timedelta(days=1)).isoformat(),
                             'expires_at': (now + timedelta(days=31)).isoformat()
                         }]   
+                    else:
+                      results = [{
+                            'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
+                            'handle':  'Garek',
+                            'message': 'some smart ideas',
+                            'created_at': (now - timedelta(days=1)).isoformat(),
+                            'expires_at': (now + timedelta(days=31)).isoformat()
+                        },
+                        {
+                            'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
+                            'handle':  'Garek',
+                            'message': 'let\'s code',
+                            'created_at': (now - timedelta(days=1)).isoformat(),
+                            'expires_at': (now + timedelta(days=31)).isoformat()
+                        },
+                        {
+                            'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
+                            'handle':  'Garek',
+                            'message': 'to be or not to',
+                            'created_at': (now - timedelta(days=1)).isoformat(),
+                            'expires_at': (now + timedelta(days=31)).isoformat()
+                        }]      
                     model['data'] = results
                     current_span.set_attribute("userName", user_handle)
                     current_span.set_attribute("userNumberMessages", len(results))
