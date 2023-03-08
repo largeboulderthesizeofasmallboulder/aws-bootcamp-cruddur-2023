@@ -62,6 +62,7 @@ provider.add_span_processor(processor)
 xray_url = os.getenv("AWS_XRAY_URL")
 xray_recorder.configure(service='Cruddur', dynamic_naming=xray_url)
 
+# OTEL ---
 # Show this in the logs within the backend-flask app (STDOUT)
 # simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
 # provider.add_span_processor(simple_processor)
@@ -92,7 +93,7 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
-
+# Cloudwatch ---
 # @app.after_request
 # def after_request(response):
 #     timestamp = strftime('[%Y-%b-%d %H:%M]')
@@ -161,6 +162,7 @@ def data_create_message():
   return
 
 @app.route("/api/activities/home", methods=['GET'])
+@xray_recorder.capture('activities-home-endpoint')
 def data_home():
   data = HomeActivities.run()
   return data, 200
@@ -172,6 +174,7 @@ def data_notifications():
   return data, 200
 
 @app.route("/api/activities/@<string:handle>", methods=['GET'])
+@xray_recorder.capture('user-activities-endpoint')
 def data_handle(handle):
   model = UserActivities.run(handle)
   if model['errors'] is not None:
@@ -203,6 +206,7 @@ def data_activities():
   return
 
 @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
+@xray_recorder.capture('show-activities-endpoint')
 def data_show_activity(activity_uuid):
   data = ShowActivity.run(activity_uuid=activity_uuid)
   return data, 200
