@@ -17,6 +17,7 @@ export default function HomeFeedPage() {
   const [popped, setPopped] = React.useState(false);
   const [poppedReply, setPoppedReply] = React.useState(false);
   const [replyActivity, setReplyActivity] = React.useState({});
+  // set a state
   const [user, setUser] = React.useState(null);
   const dataFetchedRef = React.useRef(false);
 
@@ -69,6 +70,7 @@ export default function HomeFeedPage() {
   };
 
 
+  // check when the page loads if we are authenicated
   React.useEffect(()=>{
     //prevents double call
     if (dataFetchedRef.current) return;
@@ -80,6 +82,7 @@ export default function HomeFeedPage() {
 
   return (
     <article>
+      //pass user to the components
       <DesktopNavigation user={user} active={'home'} setPopped={setPopped} />
       <div className='content'>
         <ActivityForm  
