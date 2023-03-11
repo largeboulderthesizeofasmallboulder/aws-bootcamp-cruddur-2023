@@ -46,4 +46,4 @@ aws rds create-db-instance \
   export CONNECTION_URL="postgresql://postgres:password@localhost:5432/cruddur"
   gp env CONNECTION_URL="postgresql://postgres:password@localhost:5432/cruddur"
 
-  gp env PROD_CONNECTION_URL="postgresql://cruddurroot:{do a password here}@cruddur-db-instance.catkcirvffk8.us-east-1.rds.amazonaws.com:5432/cruddur" 
+  gp env PROD_CONNECTION_URL="postgresql://cruddurroot:{password}@cruddur-db-instance.catkcirvffk8.us-east-1.rds.amazonaws.com:5432/cruddur" 
