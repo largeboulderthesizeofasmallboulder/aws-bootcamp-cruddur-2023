@@ -28,6 +28,9 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
+from middleware import AccessMiddleware
+from flask_http_middleware import MiddlewareManager
+
 
 # X-RAY... 
 from aws_xray_sdk.core import xray_recorder
@@ -85,6 +88,8 @@ cognito_jwt_token = CognitoJwtToken(
   region = os.getenv("AWS_DEFAULT_REGION")
   )
 
+
+
 # # Cognito
 
 # app.config['AWS_COGNITO_USER_POOL_ID'] =  os.getenv("AWS_COGNITO_USER_POOL_ID")
@@ -113,6 +118,10 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
+
+app.wsgi_app = MiddlewareManager(app)
+
+app.wsgi_app.add_middleware(AccessMiddleware)
 # Cloudwatch ---
 # @app.after_request
 # def after_request(response):
