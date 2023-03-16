@@ -116,12 +116,13 @@ cors = CORS(
   headers=['Content-Type', 'Authorization'], 
   expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
-)
 
+)
+# app.wsgi_app = AccessMiddleware(app.wsgi_app)
 
 app.wsgi_app = MiddlewareManager(app)
 
-app.wsgi_app.add_middleware(AccessMiddleware)
+app.wsgi_app.add_middleware(AccessMiddleware, app=app)
 # Cloudwatch ---
 # @app.after_request
 # def after_request(response):
