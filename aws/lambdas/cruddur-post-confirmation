@@ -18,7 +18,7 @@ def lambda_handler(event, context):
 
 
         sql = f"""
-            "INSERT INTO users (
+            INSERT INTO users (
                 display_name, 
                 handle, 
                 email,
@@ -29,7 +29,7 @@ def lambda_handler(event, context):
                     '{user_handle}',
                     '{user_email}', 
                     '{user_cognito_id}'
-                    )"
+                    )
         """    
         print('SQL--')
         print(sql)
