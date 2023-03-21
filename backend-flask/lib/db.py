@@ -2,6 +2,7 @@ from psycopg_pool import ConnectionPool
 import os
 import re
 import sys
+from flask import current_app as app
 
 # connection_url = os.getenv("CONNECTION_URL")
 # pool = ConnectionPool(connection_url)
@@ -14,40 +15,40 @@ class Db:
     connection_url = os.getenv("CONNECTION_URL")
     self.pool = ConnectionPool(connection_url)
 
-  def query_commit(self, sql, *kwargs):
-
+  def query_commit(self, sql, params={}):
+    self.print_sql('commit with or without returning',sql)
     pattern = r"\bRETURNING\b"
     is_returning_id = re.search(pattern, sql)
 
     try:
-      conn = self.pool.connection()
-      cur = conn.cursor()
-      cur.execute(sql,kwargs)
-      if is_returning_id:
-        returning_id = cur.fetchone()[0]
-      conn.commit()
-      if is_returning_id:
-        return returning_id
+      with self.pool.connection() as conn:
+        cur = conn.cursor()
+        cur.execute(sql,params)
+        if is_returning_id:
+          returning_id = cur.fetchone()[0]
+        conn.commit()
+        if is_returning_id:
+          return returning_id
     except Exception as err:
       self.print_sql_err(err)
       #conn.rollback()
 
-    
-  def query_object_json(self, sql):
+  
+  def query_object_json(self, sql, params={}):
     wrapped_sql = self.query_wrap_object(sql)
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
-        cur.execute(wrapped_sql)
+        cur.execute(wrapped_sql, params)
         # this will return a tuple
         # the first field being the data
         json = cur.fetchone()
         return json[0]
 
-  def query_array_json(self, sql):
+  def query_array_json(self, sql, params={}):
     wrapped_sql = self.query_wrap_array(sql)
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
-        cur.execute(wrapped_sql)
+        cur.execute(wrapped_sql, params)
         # this will return a tuple
         # the first field being the data
         json = cur.fetchone()
@@ -88,9 +89,22 @@ class Db:
     """
     return sql
 
-  def template(name):
-    with open('', 'r') as f:
-      sql = f.read()
+#  def template(self,*args):
+#     pathing = list((app.root_path,'db','sql',) + args)
+#     pathing[-1] = pathing[-1] + ".sql"
 
+#     template_path = os.path.join(*pathing)
+  def template(self,name):
+    template_path = os.path.join(app.root_path,'db','sql',name + '.sql')
+
+    with open(template_path, 'r') as f:
+      template_content = f.read()
+      return template_content 
+
+  def print_sql(self,title,sql):
+    cyan = '\033[96m'
+    no_color = '\033[0m'    
+    print(f'{cyan}SQL----------------[{title}]----{no_color}', flush=True)
+    print(sql, flush=True)
 
 db = Db()
