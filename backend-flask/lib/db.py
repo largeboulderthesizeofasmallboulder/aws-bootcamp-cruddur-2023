@@ -1,5 +1,7 @@
 from psycopg_pool import ConnectionPool
 import os
+import re
+import sys
 
 # connection_url = os.getenv("CONNECTION_URL")
 # pool = ConnectionPool(connection_url)
@@ -12,28 +14,23 @@ class Db:
     connection_url = os.getenv("CONNECTION_URL")
     self.pool = ConnectionPool(connection_url)
 
-  def query_commit_returning_id(self, sql, *kwargs):
+  def query_commit(self, sql, *kwargs):
+
+    pattern = r"\bRETURNING\b"
+    is_returning_id = re.search(pattern, sql)
+
     try:
       conn = self.pool.connection()
       cur = conn.cursor()
       cur.execute(sql,kwargs)
-      returning_id = cur.fetchone()[0]
+      if is_returning_id:
+        returning_id = cur.fetchone()[0]
       conn.commit()
-      return returning_id
+      if is_returning_id:
+        return returning_id
     except Exception as err:
       self.print_sql_err(err)
       #conn.rollback()
-
-  def query_commit(self, sql):
-    try:
-      conn = self.pool.connection()
-      cur = conn.cursor()
-      cur.execute(sql)
-      conn.commit()
-    except Exception as err:
-      self.print_sql_err(err)
-      #conn.rollback()
-
 
     
   def query_object_json(self, sql):
@@ -68,7 +65,7 @@ class Db:
       print ("psycopg2 traceback:", traceback, "-- type:", err_type)
 
       # psycopg2 extensions.Diagnostics object attribute
-      print ("\nextensions.Diagnostics:", err.diag)
+      #print ("\nextensions.Diagnostics:", err.diag)
 
       # print the pgcode and pgerror exceptions
       print ("pgerror:", err.pgerror)
@@ -90,6 +87,10 @@ class Db:
     ) array_row);
     """
     return sql
+
+  def template(name):
+    with open('', 'r') as f:
+      sql = f.read()
 
 
 db = Db()
