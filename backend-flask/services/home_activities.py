@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from opentelemetry import trace
 import logging
-from lib.db import pool, query_wrap_array
+from lib.db import db # pool, query_wrap_array
 tracer = trace.get_tracer("home.activities")
 
 class HomeActivities:
@@ -10,7 +10,8 @@ class HomeActivities:
       #logger.info("HomeAcivities")
       now = datetime.now(timezone.utc).astimezone()
 
-      sql = query_wrap_array("""
+      #sql = query_wrap_array("""
+      results = db.query_array_json("""
       SELECT
         activities.uuid,
         users.display_name,
@@ -27,19 +28,17 @@ class HomeActivities:
       ORDER BY activities.created_at DESC
       """)
 
-      with pool.connection() as conn:
-        with conn.cursor() as cur:
-          cur.execute(sql)
-          # this will return a tuple
-          # the first field being the data
-          json = cur.fetchone()
-          # rows = cur.fetchall()
-          # print("1========",flush=True)  
-          # for record in rows:
-          #   print(record, flush=True)  
-      print("========",flush=True)  
-      print(json[0],flush=True)    
-      return json[0]
+      # with pool.connection() as conn:
+      #   with conn.cursor() as cur:
+      #     cur.execute(sql)
+      #     # this will return a tuple
+      #     # the first field being the data
+      #     json = cur.fetchone()
+      # print("========",flush=True)  
+      # print(json[0],flush=True)    
+      # return json[0]
+
+      return results
 
                                                           # results = [{
                                                           #   'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
@@ -92,4 +91,3 @@ class HomeActivities:
                                                           #   }
                                                           #   results.insert(0, extra_crud)
      
-      return results
