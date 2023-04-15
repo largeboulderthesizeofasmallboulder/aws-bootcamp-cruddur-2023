@@ -1,6 +1,30 @@
 #!/usr/bin/env python3
 
 import boto3
+from datetime import datetime, timedelta, timezone
+
+
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(current_path, '..', '..'))
+sys.path.append(parent_path)
+from lib.db import db
+
+
+attrs = {
+  'endpoint_url': 'http://localhost:8000'
+}
+# unset endpoint url for use with production database
+if len(sys.argv) == 2:
+  if "prod" in sys.argv[1]:
+    attrs = {}
+dynamodb_client = boto3.client('dynamodb',**attrs)
+
+
+
+def create_message(client,message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
+    print("")
+
 
 conversation = """
 Person 1: Have you ever watched Babylon 5? It's one of my favorite TV shows!
@@ -109,13 +133,31 @@ Person 1: And Zathras was just one example of that. He was a small but important
 Person 2: Definitely. I think his character is a great example of the show's ability to balance humor and heart, and to create memorable and beloved characters that fans will cherish for years to come.
 """
 
-
+users = {
+    'my_user': {
+        uuid:
+        display_name:
+        handle:
+    },
+    'other_user': {
+        uuid:
+        display_name:
+        handle:
+    }
+}
 person_a = {
+    uuid:
+    display_name:
+    handle:
+
+}
+
+person_b = {
     user_display_name:
     user_handle:
 }
 
-
+now = datetime.now(timezone.utc).astimezone()
 lines = conversation.lstrip('\n').rstrip('\n').split('\n')
 for i in range(len(lines)):
     if lines[i].startswith('Person 1: '):
@@ -127,13 +169,15 @@ for i in range(len(lines)):
     else:
         print(lines[i])
         raise 'invalid line'
-    create_message(
-        client=
-        message_group_uuid=
-        created_at=
-        message=
-        user_uuid=
-        user_display_name=
-        user_handle=
-    )
+
+created_at = (now + timedelta(minutes=i).isoformat())    
+create_message(
+    client=ddb,
+    message_group_uuid=message_group_id,
+    created_at=created_at,
+    message=message,
+    my_user_uuid=users[key]['uuid'],
+    my_user_display_name=users[key]['display_name'],
+    my_user_handle=users[key]['handle']
+)
 
