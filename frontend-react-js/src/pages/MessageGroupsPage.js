@@ -3,6 +3,8 @@ import React from "react";
 
 import DesktopNavigation  from '../components/DesktopNavigation';
 import MessageGroupFeed from '../components/MessageGroupFeed';
+import checkAuth from '../lib/CheckAuth';
+
 
 export default function MessageGroupsPage() {
   const [messageGroups, setMessageGroups] = React.useState([]);
@@ -30,16 +32,16 @@ export default function MessageGroupsPage() {
     }
   };  
 
-  const checkAuth = async () => {
-    console.log('checkAuth')
-    // [TODO] Authenication
-    if (Cookies.get('user.logged_in')) {
-      setUser({
-        display_name: Cookies.get('user.name'),
-        handle: Cookies.get('user.username')
-      })
-    }
-  };
+  // const checkAuth = async () => {
+  //   console.log('checkAuth')
+  //   // [TODO] Authenication
+  //   if (Cookies.get('user.logged_in')) {
+  //     setUser({
+  //       display_name: Cookies.get('user.name'),
+  //       handle: Cookies.get('user.username')
+  //     })
+  //   }
+  // };
 
   React.useEffect(()=>{
     //prevents double call
@@ -47,7 +49,7 @@ export default function MessageGroupsPage() {
     dataFetchedRef.current = true;
 
     loadData();
-    checkAuth();
+    checkAuth(setUser);
   }, [])
   return (
     <article>
