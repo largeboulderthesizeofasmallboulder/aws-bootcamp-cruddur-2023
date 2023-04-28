@@ -176,17 +176,34 @@ def data_message_groups():
 
   
 
-@app.route("/api/messages/@<string:handle>", methods=['GET'])
-def data_messages(handle):
-  user_sender_handle = 'andrewbrown'
-  user_receiver_handle = request.args.get('user_reciever_handle')
+@app.route("/api/messages/<string:message_group_uuid>", methods=['GET'])
+def data_messages(message_group_uuid):
+  # app.logger.info('AUTH TOKEN')  
+  access_token = extract_access_token(request.headers)
+  try:
+    # authenticated request
+    claims = cognito_jwt_token.verify(access_token)
+    app.logger.info('authenticated')  
+    app.logger.info(claims)  
+    cognito_user_id = claims['sub']
+    model = Messages.run(cognito_user_id = cognito_user_id, message_group_uuid = message_group_uuid)    
+    if model['errors'] is not None:
+      return model['errors'], 422
+    else:
+      return model['data'], 200
+    # cognito_jwt_token.claims = self.token_service.claims
+    # g.cognito_claims = self.claims
+  # unauthenticated request  
+  except TokenVerifyError as e:
+    app.logger.debug(e)  
+    app.logger.info('unauthenticated')  
+    # _ = request.data
+    # abort(make_response(jsonify(message=str(e)), 401))
+    return {}, 401
 
-  model = Messages.run(user_sender_handle=user_sender_handle, user_receiver_handle=user_receiver_handle)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
-  return
+
+
+
 
 @app.route("/api/messages", methods=['POST','OPTIONS'])
 @cross_origin()

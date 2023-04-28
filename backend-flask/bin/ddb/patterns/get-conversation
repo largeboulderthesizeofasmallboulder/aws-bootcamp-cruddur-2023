@@ -15,6 +15,8 @@ if len(sys.argv) == 2:
 
 dynamodb = boto3.client('dynamodb',**attrs)
 table_name = 'cruddur-messages'
+current_year = str(datetime.now().year)
+
 
 message_group_uuid = "5ae290ed-55d1-47a0-bc6d-fe2bc2700399"
 
@@ -26,7 +28,7 @@ query_params = {
   'ScanIndexForward': False,
   'Limit': 20,
   'ExpressionAttributeValues': {
-    ':year': {'S': '2023'},
+    ':year': {'S': current_year},
   #  ':start_date' : { 'S' : '2023-04-01T00:00:00.000000+00:00'},
   #  ':end_date'   : { 'S' : '2023-04-31T23:59:59.999999+00:00'},
     ':pk': {'S': f"MSG#{message_group_uuid}"}
