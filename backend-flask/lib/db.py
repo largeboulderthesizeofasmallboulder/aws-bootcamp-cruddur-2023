@@ -16,7 +16,7 @@ class Db:
     self.pool = ConnectionPool(connection_url)
 
   def query_commit(self, sql, params={}):
-    self.print_sql('commit with or without returning',sql)
+    self.print_sql('commit with or without returning',sql,params)
     pattern = r"\bRETURNING\b"
     is_returning_id = re.search(pattern, sql)
 
@@ -53,6 +53,17 @@ class Db:
         # the first field being the data
         json = cur.fetchone()
         return json[0]
+
+  # when we want to return a a single value
+  def query_value(self,sql,params={}):
+    self.print_sql('value',sql,params)
+
+    with self.pool.connection() as conn:
+      with conn.cursor() as cur:
+        cur.execute(sql,params)
+        json = cur.fetchone()
+        return json[0]
+
 
   def print_sql_err(self, err):
       # get details about the exception
@@ -101,10 +112,10 @@ class Db:
       template_content = f.read()
       return template_content 
 
-  def print_sql(self,title,sql):
+  def print_sql(self,title,sql,params={}):
     cyan = '\033[96m'
     no_color = '\033[0m'    
     print(f'{cyan}SQL----------------[{title}]----{no_color}', flush=True)
-    print(sql, flush=True)
+    print(sql, params)
 
 db = Db()
