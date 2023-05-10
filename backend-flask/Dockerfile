@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM 412269508530.dkr.ecr.us-east-1.amazonaws.com/cruddur-python:3.10-slim-buster
 
 # Inside Container
 #make a new folder inside tcontainer
@@ -23,7 +23,8 @@ RUN chmod +x /scriptToStart.sh
 
 #Set env vars
 #Inside the container and will remain set when the container is running
-ENV FLASK_ENV=development
+#ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
 
 EXPOSE ${PORT}
 
