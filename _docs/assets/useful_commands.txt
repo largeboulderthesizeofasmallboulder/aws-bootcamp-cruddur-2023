@@ -60,3 +60,19 @@ aws ec2 modify-security-group-rules \
     gp env DB_SG_RULE_ID=""
 
 log to ecr aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+
+export DEFAULT_VPC_ID=$(aws ec2 describe-vpcs \
+--filters "Name=isDefault, Values=true" \
+--query "Vpcs[0].VpcId" \
+--output text)
+echo $DEFAULT_VPC_ID
+
+aws ecs execute-command  \
+--region $AWS_DEFAULT_REGION \
+--cluster cruddur \
+--task d30c341af43841c3a7ba93c705568e64 \
+--container backend-flask \
+--command "/bin/bash" \
+--interactive
+
+sudo yum install -y https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm
