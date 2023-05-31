@@ -8,6 +8,7 @@ connection_url = os.getenv("CONNECTION_URL")
 
 conn = None
 try:
+  print(connection_url)
   print('attempting connection')
   conn = psycopg.connect(connection_url)
   print("Connection successful!")
