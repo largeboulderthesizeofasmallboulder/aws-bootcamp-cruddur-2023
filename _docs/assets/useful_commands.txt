@@ -91,3 +91,5 @@ export DEFAULT_SUBNET_IDS=$(aws ec2 describe-subnets  \
 echo $DEFAULT_SUBNET_IDS
 
 aws ecs list-tasks --cluster cruddur
+
+aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.json
