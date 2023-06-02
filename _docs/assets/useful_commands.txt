@@ -93,3 +93,23 @@ echo $DEFAULT_SUBNET_IDS
 aws ecs list-tasks --cluster cruddur
 
 aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.json
+
+
+docker build \
+--build-arg REACT_APP_BACKEND_URL="http://cruddur-alb-1933488571.us-east-1.elb.amazonaws.com:4567" \
+--build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
+--build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
+--build-arg REACT_APP_AWS_USER_POOLS_ID="us-east-1_PaCaWCGSC" \
+--build-arg REACT_APP_CLIENT_ID="19kfkj5dv37e7blnvl5rc8qvl6" \
+-t frontend-react-js \
+-f Dockerfile.prod \
+.
+
+cruddur-alb-1933488571.us-east-1.elb.amazonaws.com
+
+
+
+
+aws ecr create-repository \
+  --repository-name frontend-react-js \
+  --image-tag-mutability MUTABLE
