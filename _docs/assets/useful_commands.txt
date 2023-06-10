@@ -96,7 +96,7 @@ aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.js
 
 
 docker build \
---build-arg REACT_APP_BACKEND_URL="http://api.writeand.click" \
+--build-arg REACT_APP_BACKEND_URL="https://api.writeand.click" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_USER_POOLS_ID="us-east-1_PaCaWCGSC" \
