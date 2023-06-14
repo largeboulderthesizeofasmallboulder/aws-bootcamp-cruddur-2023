@@ -7,8 +7,12 @@ printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
 
 echo "db-schema-load"
 
+PROJECT_PATH=$(dirname $(dirname $(dirname $(readlink -f "$0"))))
+echo $PROJECT_PATH
+BACKEND_FLASK_PATH="$PROJECT_PATH/backend-flask"
+schema_path="$BACKEND_FLASK_PATH/db/schema.sql"
 
-schema_path="$(realpath .)/db/schema.sql"
+# schema_path="$(realpath .)/db/schema.sql"
 echo $schema_path
 
 if [ "$1" = 'prod' ]; then

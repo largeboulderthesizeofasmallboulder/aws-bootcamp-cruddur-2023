@@ -1,5 +1,9 @@
 #! /usr/bin/bash
 
+PROJECT_PATH=$(dirname $(dirname $(dirname $(dirname $(readlink -f "$0")))))
+echo $PROJECT_PATH
+FRONTEND_REACT_JS_PATH="$PROJECT_PATH/frontend-react-js"
+
 docker build \
 --build-arg REACT_APP_BACKEND_URL="https://api.writeand.click" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
@@ -7,5 +11,5 @@ docker build \
 --build-arg REACT_APP_AWS_USER_POOLS_ID="us-east-1_PaCaWCGSC" \
 --build-arg REACT_APP_CLIENT_ID="19kfkj5dv37e7blnvl5rc8qvl6" \
 -t frontend-react-js \
--f Dockerfile.prod \
-.
+-f "$FRONTEND_REACT_JS_PATH/Dockerfile.prod" \
+"$FRONTEND_REACT_JS_PATH/."
