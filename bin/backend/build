@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-PROJECT_PATH=$(dirname $(dirname $(dirname $(dirname $(readlink -f "$0")))))
+PROJECT_PATH=$(dirname $(dirname $(readlink -f "$0")))
 echo $PROJECT_PATH
 BACKEND_FLASK_PATH="$PROJECT_PATH/backend-flask"
 
